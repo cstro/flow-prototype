@@ -62,7 +62,7 @@
 }
 
 .blob {
-  position: absolute;
+  position: fixed;
   width: 150px;
   transition: transform 150ms;
   transform: scale(1);

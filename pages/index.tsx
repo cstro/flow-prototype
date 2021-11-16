@@ -23,6 +23,7 @@ const Blob = ({ progress }: { progress: number }) => {
 
 const Home: NextPage = () => {
   const [totalMinutes, setTotalMinutes] = useState(5);
+  const [minutesInputValue, setMinutesInputValue] = useState(String(totalMinutes))
   const totalSeconds = totalMinutes * 60
 
   const [seconds, setSeconds] = useState(totalSeconds)
@@ -48,6 +49,14 @@ const Home: NextPage = () => {
     setSeconds(totalMinutes * 60);
   }, [totalMinutes]);
 
+  useEffect(() => {
+    const parsed = Number(minutesInputValue)
+    if (parsed !== NaN && parsed > 0) {
+      setTotalMinutes(parsed);
+      setSeconds(parsed * 60);
+    }
+  }, [minutesInputValue])
+
 
   function startClick() {
     if (seconds < 1) {
@@ -59,6 +68,8 @@ const Home: NextPage = () => {
 
   function refresh() {
     setSeconds(totalMinutes * 60)
+    setTotalMinutes(5)
+    setMinutesInputValue('5')
     setIsActive(false)
   }
 
@@ -78,16 +89,16 @@ const Home: NextPage = () => {
         <div className={styles.debug}>
           <button className={styles.refreshButton} onClick={refresh}><FiRefreshCw /></button>
 
-          {!isActive && seconds === totalSeconds && (
+          {!isActive && seconds === totalMinutes * 60 && (
             <>
               <span>Duration:</span>
-              <input className={styles.minutesInput} value={totalMinutes} onChange={(event) => setTotalMinutes(Number(event.target.value))} />
+              <input className={styles.minutesInput} value={minutesInputValue} onChange={(event) => setMinutesInputValue(event.target.value)} />
               <span>mins</span>
             </>
           )}
 
 
-          {seconds !== totalSeconds && <>Time Left: {Math.floor(seconds / 60)}m {seconds % 60}s</>}
+          {seconds !== totalMinutes * 60 && <>Time Left: {Math.floor(seconds / 60)}m {seconds % 60}s</>}
         </div>
 
         <button className={styles.button} onClick={startClick}>{isActive ? <FiPause /> : <FiPlay />}</button>

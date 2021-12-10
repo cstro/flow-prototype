@@ -2,60 +2,97 @@ import type { NextPage } from 'next'
 import { addMinutes } from 'date-fns'
 import { useEffect, useState, useRef } from 'react'
 import Head from 'next/head'
-import Link from 'next/link'
 import styles from '../styles/Home.module.css'
-import BlobPlayButton from '../components/BlobPlayButton'
-import { Box, Button, ButtonGroup, Flex, Stack, Text } from '@chakra-ui/react'
-import { FiPlay, FiPause, FiRefreshCw, FiSettings } from "react-icons/fi"
+import { Box, Button, Stack, Text } from '@chakra-ui/react'
 
-const MINUTES_TO_ADD = 1
+const FOCUS_DURATION = 25
+const BREAK_DURATION = 5
 
 const Home: NextPage = () => {
   let interval = useRef<NodeJS.Timer>();
 
-  const [endTime, setEndTime] = useState<number | null>(null);
-  const [minutesLeft, setMinutesLeft] = useState<number>(MINUTES_TO_ADD);
+  const [focusEndTime, setFocusEndTime] = useState<number | null>(null);
+  const [breakEndTime, setBreakEndTime] = useState<number | null>(null);
+
+  const [minutesLeft, setMinutesLeft] = useState<number>(FOCUS_DURATION);
   const [secondsLeft, setSecondsLeft] = useState<number>(0);
 
-  const loop = () => {
-    var now = new Date().getTime();
+  const beginFocus = () => {
+    clearInterval(Number(interval.current));
+    interval.current = undefined;
+    setBreakEndTime(null)
 
-    var distance = Number(endTime) - now;
-
-    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-    setMinutesLeft(minutes);
-    setSecondsLeft(seconds)
-
-    if (distance < 0) {
-      clearInterval(Number(interval.current));
-      interval.current = undefined;
-      setEndTime(null)
-
-      showNotification()
-    }
+    setFocusEndTime(addMinutes(new Date(), FOCUS_DURATION).getTime())
   }
 
-  const startSession = () => {
-    setEndTime(addMinutes(new Date(), MINUTES_TO_ADD).getTime())
+  const beginBreak = () => {
+    clearInterval(Number(interval.current));
+    interval.current = undefined;
+    setFocusEndTime(null)
+
+    setBreakEndTime(addMinutes(new Date(), BREAK_DURATION).getTime())
   }
 
   useEffect(() => {
-    if (endTime) {
-      loop()
-      interval.current = setInterval(loop, 1000);
-    }
-  }, [endTime]);
+    const focusCountDown = () => {
+      const now = new Date().getTime();
 
-  const showNotification = async () => {
-    var options = {
-      body: 'Time to take a break!'
+      const distance = Number(focusEndTime) - now;
+
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      setMinutesLeft(minutes);
+      setSecondsLeft(seconds)
+
+      if (distance <= 0) {
+        clearInterval(Number(interval.current));
+        interval.current = undefined;
+        setFocusEndTime(null)
+
+        showNotification('Focus session finished', 'Time to take a break!')
+      }
     }
-    new Notification('Test notification', options)
+
+    if (focusEndTime) {
+      focusCountDown()
+      interval.current = setInterval(focusCountDown, 1000);
+    }
+  }, [focusEndTime]);
+
+
+  useEffect(() => {
+    const breakCountDown = () => {
+      const now = new Date().getTime();
+
+      const distance = Number(breakEndTime) - now;
+
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      setMinutesLeft(Math.max(minutes, 0));
+      setSecondsLeft(Math.max(seconds, 0))
+
+      if (distance <= 0) {
+        clearInterval(Number(interval.current));
+        interval.current = undefined;
+        setBreakEndTime(null)
+
+        showNotification('Break finished', 'Time to start focusing!')
+      }
+    }
+
+
+    if (breakEndTime) {
+      breakCountDown()
+      interval.current = setInterval(breakCountDown, 1000);
+    }
+  }, [breakEndTime]);
+
+  const showNotification = async (title: string, body: string) => {
+    const options = { body }
+    new Notification(title, options)
   }
-
-  const displayMinutes = minutesLeft + (secondsLeft % 60 !== 0 ? 1 : 0)
 
   return (
     <div className={styles.container}>
@@ -69,15 +106,26 @@ const Home: NextPage = () => {
         <Stack direction="row" align="center">
           <Box bg="blue.500" color="white" px="24" py="20" lineHeight="1" borderRadius="50%">
             <Text align="center">Focus</Text>
-            <Text fontSize="60px" lineHeight="71px">{String(displayMinutes).padStart(2, '0')}</Text>
+            <Text fontSize="60px" lineHeight="71px">{String(FOCUS_DURATION).padStart(2, '0')}</Text>
           </Box>
           <Box marginLeft="-4" bg="pink.100" color="white" px="10" py="8" lineHeight="1" borderRadius="50%">
             <Text align="center">Break</Text>
-            <Text  fontSize="60px" lineHeight="71px">05</Text>
+            <Text  fontSize="60px" lineHeight="71px">{String(BREAK_DURATION).padStart(2, '0')}</Text>
           </Box>
         </Stack>
 
-          <Button disabled={Boolean(interval.current)} colorScheme="blue" size='lg' width='244px' height='56px' borderRadius='50px' fontSize="13px" onClick={startSession}>Begin Focus</Button>
+        <Stack direction="row" spacing="4">
+          <Stack direction="row" alignItems="center" spacing="1">
+            <Text fontSize="5xl">{String(minutesLeft).padStart(2, '0')}</Text>
+            <Text fontSize="lg">m</Text>
+          </Stack>
+          <Stack direction="row" alignItems="center" spacing="1">
+            <Text fontSize="5xl">{String(secondsLeft).padStart(2, '0')}</Text>
+            <Text fontSize="lg">s</Text>
+          </Stack>
+        </Stack>
+          <Button disabled={Boolean(focusEndTime && interval.current)} colorScheme="blue" size='lg' width='244px' height='56px' borderRadius='50px' fontSize="13px" onClick={beginFocus}>Begin Focus</Button>
+          <Button disabled={Boolean(breakEndTime && interval.current)} colorScheme="pink" size='lg' width='244px' height='56px' borderRadius='50px' fontSize="13px" onClick={beginBreak}>Begin Break</Button>
         </Stack>
       </main>
     </div>

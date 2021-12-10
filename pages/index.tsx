@@ -17,7 +17,8 @@ const Home: NextPage = () => {
   const [minutesLeft, setMinutesLeft] = useState<number>(FOCUS_DURATION);
   const [secondsLeft, setSecondsLeft] = useState<number>(0);
 
-  const beginFocus = () => {
+  const beginFocus = async () => {
+    await Notification.requestPermission();
     clearInterval(Number(interval.current));
     interval.current = undefined;
     setBreakEndTime(null)
@@ -114,7 +115,7 @@ const Home: NextPage = () => {
           </Box>
         </Stack>
 
-        <Stack direction="row" spacing="4">
+        {/* <Stack direction="row" spacing="4">
           <Stack direction="row" alignItems="center" spacing="1">
             <Text fontSize="5xl">{String(minutesLeft).padStart(2, '0')}</Text>
             <Text fontSize="lg">m</Text>
@@ -123,9 +124,13 @@ const Home: NextPage = () => {
             <Text fontSize="5xl">{String(secondsLeft).padStart(2, '0')}</Text>
             <Text fontSize="lg">s</Text>
           </Stack>
-        </Stack>
-          <Button disabled={Boolean(focusEndTime && interval.current)} colorScheme="blue" size='lg' width='244px' height='56px' borderRadius='50px' fontSize="13px" onClick={beginFocus}>Begin Focus</Button>
-          <Button disabled={Boolean(breakEndTime && interval.current)} colorScheme="pink" size='lg' width='244px' height='56px' borderRadius='50px' fontSize="13px" onClick={beginBreak}>Begin Break</Button>
+        </Stack> */}
+
+        {Boolean(focusEndTime && interval.current) && <Text fontSize="lg">Time to focus...</Text>}
+        {Boolean(breakEndTime && interval.current) && <Text fontSize="lg">Take a break...</Text>}
+
+        <Button disabled={Boolean(focusEndTime && interval.current)} colorScheme="blue" size='lg' width='244px' height='56px' borderRadius='50px' fontSize="13px" onClick={beginFocus}>Begin Focus</Button>
+        <Button disabled={Boolean(breakEndTime && interval.current)} colorScheme="pink" size='lg' width='244px' height='56px' borderRadius='50px' fontSize="13px" onClick={beginBreak}>Begin Break</Button>
         </Stack>
       </main>
     </div>

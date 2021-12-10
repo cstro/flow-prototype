@@ -3,13 +3,21 @@ import { addMinutes } from 'date-fns'
 import { useEffect, useState, useRef } from 'react'
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
-import { Box, Button, Stack, Text } from '@chakra-ui/react'
+import { Box, Button, Stack, Text, keyframes } from '@chakra-ui/react'
 
 const FOCUS_DURATION = 25
 const BREAK_DURATION = 5
 
+const spin = keyframes`
+  0% {transform: scale(1);}
+  50% {transform: scale(1.2)}
+  100% {transform: scale(1)}
+`;
+
 const Home: NextPage = () => {
   let interval = useRef<NodeJS.Timer>();
+
+  const spinAnimation = `${spin} infinite 10s ease-in-out`
 
   const [focusEndTime, setFocusEndTime] = useState<number | null>(null);
   const [breakEndTime, setBreakEndTime] = useState<number | null>(null);
@@ -95,6 +103,9 @@ const Home: NextPage = () => {
     new Notification(title, options)
   }
 
+  const isFocusing = Boolean(focusEndTime && interval.current)
+  const isOnBreak = Boolean(breakEndTime && interval.current)
+
   return (
     <div className={styles.container}>
       <Head>
@@ -105,11 +116,11 @@ const Home: NextPage = () => {
 
       <Stack spacing="10" align="center">
         <Stack direction="row" align="center">
-          <Box bg="blue.500" color="white" px="24" py="20" lineHeight="1" borderRadius="50%">
+          <Box animation={isFocusing ? spinAnimation : undefined} bg="blue.500" color="white" px="24" py="20" lineHeight="1" borderRadius="50%">
             <Text align="center">Focus</Text>
             <Text fontSize="60px" lineHeight="71px">{String(FOCUS_DURATION).padStart(2, '0')}</Text>
           </Box>
-          <Box marginLeft="-4" bg="pink.100" color="white" px="10" py="8" lineHeight="1" borderRadius="50%">
+          <Box animation={isOnBreak ? spinAnimation : undefined} marginLeft="-4" bg="pink.100" color="white" px="10" py="8" lineHeight="1" borderRadius="50%">
             <Text align="center">Break</Text>
             <Text  fontSize="60px" lineHeight="71px">{String(BREAK_DURATION).padStart(2, '0')}</Text>
           </Box>
@@ -126,11 +137,11 @@ const Home: NextPage = () => {
           </Stack>
         </Stack> */}
 
-        {Boolean(focusEndTime && interval.current) && <Text fontSize="lg">Time to focus...</Text>}
-        {Boolean(breakEndTime && interval.current) && <Text fontSize="lg">Take a break...</Text>}
+        {isFocusing && <Text fontSize="lg">Time to focus...</Text>}
+        {isOnBreak && <Text fontSize="lg">Take a break...</Text>}
 
-        <Button disabled={Boolean(focusEndTime && interval.current)} colorScheme="blue" size='lg' width='244px' height='56px' borderRadius='50px' fontSize="13px" onClick={beginFocus}>Begin Focus</Button>
-        <Button disabled={Boolean(breakEndTime && interval.current)} colorScheme="pink" size='lg' width='244px' height='56px' borderRadius='50px' fontSize="13px" onClick={beginBreak}>Begin Break</Button>
+        <Button disabled={isFocusing} colorScheme="blue" size='lg' width='244px' height='56px' borderRadius='50px' fontSize="13px" onClick={beginFocus}>Begin Focus</Button>
+        <Button disabled={isOnBreak} colorScheme="pink" size='lg' width='244px' height='56px' borderRadius='50px' fontSize="13px" onClick={beginBreak}>Begin Break</Button>
         </Stack>
       </main>
     </div>

@@ -1,10 +1,18 @@
 import { Box, Button, keyframes, Stack, Text } from '@chakra-ui/react'
-import { differenceInMinutes, differenceInSeconds, format } from 'date-fns'
+import {
+  differenceInMinutes,
+  differenceInSeconds,
+  format,
+  fromUnixTime,
+  isToday,
+} from 'date-fns'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useEffect, useRef, useState } from 'react'
+import { useBoolean } from 'usehooks-ts'
+import SessionLogModal from '../features/sessions/session-log-modal'
 
-import useSessionStore from '../store/useSessionStore'
+import useSessionStore from '../store'
 import styles from '../styles/Home.module.css'
 
 const FOCUS_DURATION = 25
@@ -18,6 +26,8 @@ const spin = keyframes`
 
 const Home: NextPage = () => {
   const interval = useRef<NodeJS.Timer>()
+  const isFocusing = useBoolean(false)
+  const isOnBreak = useBoolean(false)
 
   const { sessions, startNextSession, currentSession } = useSessionStore()
 
@@ -49,13 +59,15 @@ const Home: NextPage = () => {
         return
       }
 
-      setMinutesLeft(differenceInMinutes(currentSession.to, now))
+      const { to, type } = currentSession
 
-      if (differenceInSeconds(currentSession.to, now) <= 0) {
+      setMinutesLeft(differenceInMinutes(fromUnixTime(to), now))
+
+      if (differenceInSeconds(fromUnixTime(to), now) <= 0) {
         clearInterval(Number(interval.current))
         interval.current = undefined
 
-        if (currentSession.type === 'break') {
+        if (type === 'break') {
           showNotification('Break finished', 'Time to start focusing!')
         } else {
           showNotification('Focus session finished', 'Time to take a break!')
@@ -63,16 +75,23 @@ const Home: NextPage = () => {
       }
     }
 
+    focusCountDown()
     interval.current = setInterval(focusCountDown, 1000)
+  }, [currentSession])
+
+  useEffect(() => {
+    if (!currentSession) {
+      return
+    }
+
+    isFocusing.setValue(currentSession.type === 'focus')
+    isOnBreak.setValue(currentSession.type === 'break')
   }, [currentSession])
 
   const showNotification = async (title: string, body: string) => {
     const options = { body }
     new Notification(title, options)
   }
-
-  const isFocusing = currentSession?.type === 'focus'
-  const isOnBreak = currentSession?.type === 'break'
 
   return (
     <div className={styles.container}>
@@ -84,7 +103,7 @@ const Home: NextPage = () => {
         <Stack spacing="10" align="center">
           <Stack direction="row" align="center">
             <Box
-              animation={isFocusing ? spinAnimation : undefined}
+              animation={isFocusing.value ? spinAnimation : undefined}
               bg="blue.500"
               color="white"
               px="24"
@@ -94,11 +113,13 @@ const Home: NextPage = () => {
             >
               <Text align="center">Focus</Text>
               <Text fontSize="60px" lineHeight="71px">
-                {String(minutesLeft).padStart(2, '0')}
+                {String(
+                  isFocusing.value ? minutesLeft : FOCUS_DURATION
+                ).padStart(2, '0')}
               </Text>
             </Box>
             <Box
-              animation={isOnBreak ? spinAnimation : undefined}
+              animation={isOnBreak.value ? spinAnimation : undefined}
               marginLeft="-4"
               bg="pink.100"
               color="white"
@@ -109,16 +130,18 @@ const Home: NextPage = () => {
             >
               <Text align="center">Break</Text>
               <Text fontSize="60px" lineHeight="71px">
-                {String(BREAK_DURATION).padStart(2, '0')}
+                {String(
+                  isOnBreak.value ? minutesLeft : BREAK_DURATION
+                ).padStart(2, '0')}
               </Text>
             </Box>
           </Stack>
 
-          {isFocusing && <Text fontSize="lg">Time to focus...</Text>}
-          {isOnBreak && <Text fontSize="lg">Take a break...</Text>}
+          {isFocusing.value && <Text fontSize="lg">Time to focus...</Text>}
+          {isOnBreak.value && <Text fontSize="lg">Take a break...</Text>}
 
           <Button
-            disabled={isFocusing}
+            disabled={isFocusing.value}
             colorScheme="blue"
             size="lg"
             width="244px"
@@ -130,7 +153,7 @@ const Home: NextPage = () => {
             Begin Focus
           </Button>
           <Button
-            disabled={isOnBreak}
+            disabled={isOnBreak.value}
             colorScheme="pink"
             size="lg"
             width="244px"
@@ -142,20 +165,27 @@ const Home: NextPage = () => {
             Begin Break
           </Button>
         </Stack>
-        {Object.values(sessions).map((session) => {
-          return (
-            <div key={session.id}>
-              {session.type}: {getTime(session.from)} - {getTime(session.to)}
-            </div>
+        {Object.values(sessions)
+          .filter(
+            (session) =>
+              isToday(fromUnixTime(session.to)) ||
+              isToday(fromUnixTime(session.from))
           )
-        })}
+          .map((session) => {
+            return (
+              <div key={session.id}>
+                {session.type}: {getTime(session.from)} - {getTime(session.to)}
+              </div>
+            )
+          })}
+        <SessionLogModal />
       </main>
     </div>
   )
 }
 
-const getTime = (date: Date) => {
-  return format(date, 'HH:mmaaa')
+const getTime = (timestamp: number | string) => {
+  return format(fromUnixTime(Number(timestamp)), 'HH:mmaaa')
 }
 
 export default Home

@@ -1,4 +1,5 @@
 import '../styles/globals.css'
+
 import { ChakraProvider, extendTheme } from '@chakra-ui/react'
 import type { AppProps } from 'next/app'
 
@@ -12,16 +13,18 @@ const colors = {
     500: '#126BFB',
   },
   pink: {
-    100: "#FBADC5",
-  }
+    100: '#FBADC5',
+  },
 }
 
 const styles = {
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   global: (props: any) => ({
     'html, body': {
       fontSize: 'sm',
       fontFamily: "'Rubik', sans-serif",
-      backgroundColor: props.colorMode === 'dark' ? 'background.dark' : 'background.light',
+      backgroundColor:
+        props.colorMode === 'dark' ? 'background.dark' : 'background.light',
       height: '100vh',
     },
   }),
@@ -36,6 +39,5 @@ function App({ Component, pageProps }: AppProps) {
     </ChakraProvider>
   )
 }
-
 
 export default App

@@ -1,6 +1,7 @@
-import Document, { Html, Head, Main, NextScript } from 'next/document'
+import Document, { Head, Html, Main, NextScript } from 'next/document'
 
 class MyDocument extends Document {
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   static async getInitialProps(ctx: any) {
     const initialProps = await Document.getInitialProps(ctx)
     return { ...initialProps }
@@ -11,8 +12,15 @@ class MyDocument extends Document {
       <Html>
         <Head>
           <link rel="preconnect" href="https://fonts.googleapis.com" />
-          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
-          <link href="https://fonts.googleapis.com/css2?family=Rubik:ital@0;1&display=swap" rel="stylesheet" />
+          <link
+            rel="preconnect"
+            href="https://fonts.gstatic.com"
+            crossOrigin="true"
+          />
+          <link
+            href="https://fonts.googleapis.com/css2?family=Rubik:ital@0;1&display=swap"
+            rel="stylesheet"
+          />
         </Head>
         <body>
           <Main />

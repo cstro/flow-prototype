@@ -10,7 +10,10 @@ const BreakTimer = () => {
   const totalTimeInSeconds = breakDuration * 60
   const timeLeftInSeconds = timeLeft.minutes * 60 + timeLeft.seconds
 
-  const progress = timeLeftInSeconds / totalTimeInSeconds + 0.25
+  const progress =
+    timeLeftInSeconds === totalTimeInSeconds
+      ? 1.5
+      : timeLeftInSeconds / totalTimeInSeconds + 0.1
 
   let size = '100vw'
   if (window.innerHeight > window.innerWidth) {

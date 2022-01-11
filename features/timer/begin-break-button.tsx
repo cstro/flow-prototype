@@ -22,6 +22,8 @@ const BeginBreakButton = () => {
     setStatus(TimerStatus.tracking)
     setType(SessionType.break)
 
+    setTimeLeft({ minutes: 0, seconds: 0 })
+
     const now = new Date()
     const endTime = addMinutes(now, breakDuration)
 
@@ -37,9 +39,8 @@ const BeginBreakButton = () => {
         setTimeout(async () => {
           chime()
           new Notification('Time to focus!')
-
-          clearInterval(interval)
         }, 1000)
+        clearInterval(interval)
       }
     }, 200)
   }

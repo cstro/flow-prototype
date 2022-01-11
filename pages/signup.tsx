@@ -12,7 +12,7 @@ import { NextPage } from 'next'
 import { Card } from '../components/card'
 import { DividerWithText } from '../components/divider-with-text'
 import { Link } from '../components/link'
-import { LoginForm } from '../features/auth/login-form'
+import SignUpForm from '../features/auth/sign-up-form'
 
 const SignUp: NextPage = () => (
   <Box
@@ -23,14 +23,14 @@ const SignUp: NextPage = () => (
   >
     <Box maxW="md" mx="auto">
       <Heading textAlign="center" size="xl" fontWeight="extrabold">
-        Sign in to your account
+        Create an account
       </Heading>
       <Text mt="4" mb="8" align="center" maxW="md" fontWeight="medium">
         <Text as="span">Already have an account?</Text>
         <Link href="/login">Login here</Link>
       </Text>
       <Card>
-        <LoginForm />
+        <SignUpForm />
         <DividerWithText mt="6">or continue with</DividerWithText>
         <SimpleGrid mt="6" columns={3} spacing="3">
           <Button color="currentColor" variant="outline">

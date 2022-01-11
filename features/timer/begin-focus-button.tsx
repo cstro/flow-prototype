@@ -22,10 +22,12 @@ const BeginFocusButton = () => {
 
     setStatus(TimerStatus.tracking)
     setType(SessionType.focus)
-    setTimeLeft({ minutes: 0, seconds: 0 })
 
     const now = new Date()
     const endTime = addMinutes(now, focusDuration)
+
+    const calculatedTimeLeft = getTimeLeft(endTime)
+    setTimeLeft(calculatedTimeLeft)
 
     const interval = setInterval(() => {
       const calculatedTimeLeft = getTimeLeft(endTime)

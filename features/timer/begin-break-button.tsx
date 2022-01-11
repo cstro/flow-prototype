@@ -22,10 +22,11 @@ const BeginBreakButton = () => {
     setStatus(TimerStatus.tracking)
     setType(SessionType.break)
 
-    setTimeLeft({ minutes: 0, seconds: 0 })
-
     const now = new Date()
     const endTime = addMinutes(now, breakDuration)
+
+    const calculatedTimeLeft = getTimeLeft(endTime)
+    setTimeLeft(calculatedTimeLeft)
 
     const interval = setInterval(() => {
       const calculatedTimeLeft = getTimeLeft(endTime)

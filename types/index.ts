@@ -1,4 +1,7 @@
-export type SessionType = 'focus' | 'break'
+export enum SessionType {
+  focus,
+  break,
+}
 
 export type Session = {
   id: string

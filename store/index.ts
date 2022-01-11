@@ -1,62 +1,43 @@
-import { addMinutes, getUnixTime } from 'date-fns'
-import { nanoid } from 'nanoid'
 import create, { GetState, SetState } from 'zustand'
 import { devtools, persist, StoreApiWithPersist } from 'zustand/middleware'
+import { SessionType } from '../types'
 
-import type { Session, SessionType } from '../types'
+import { TimerStatus, Time } from '../types/timer'
 
-type AppState = {
-  currentSession: Session | null
-  sessions: Record<string, Session>
-  startNextSession: (sessionType: SessionType, duration: number) => void
+type StoreState = {
+  status: TimerStatus
+  timeLeft: Time
+  type: SessionType
+  setStatus: (status: TimerStatus) => void
+  setTimeLeft: (timeLeft: Time) => void
+  setType: (type: SessionType) => void
 }
 
-const createSession = (session: {
-  type: SessionType
-  from: number
-  to: number
-}): Session => ({
-  id: nanoid(),
-  ...session,
-})
-
 const useSessionStore = create<
-  AppState,
-  SetState<AppState>,
-  GetState<AppState>,
-  StoreApiWithPersist<AppState>
+  StoreState,
+  SetState<StoreState>,
+  GetState<StoreState>,
+  StoreApiWithPersist<StoreState>
 >(
   persist(
     devtools((set) => ({
-      sessions: {},
-      currentSession: null,
-
-      startNextSession: (sessionType: SessionType, duration: number) => {
-        set((state) => {
-          const { currentSession } = state
-          const nextFrom = new Date()
-
-          if (currentSession) {
-            state.sessions[currentSession.id].completed = true
-            state.sessions[currentSession.id].to = getUnixTime(nextFrom)
-          }
-
-          const endTime = addMinutes(nextFrom, duration)
-
-          const newSession: Session = createSession({
-            type: sessionType,
-            from: getUnixTime(nextFrom),
-            to: getUnixTime(endTime),
-          })
-
-          state.sessions[newSession.id] = newSession
-          state.currentSession = newSession
-        })
+      status: TimerStatus.off,
+      timeLeft: { minutes: 25, seconds: 0 },
+      type: SessionType.focus,
+      setStatus(status: TimerStatus) {
+        set({ status })
+      },
+      setTimeLeft(timeLeft: Time) {
+        set({ timeLeft })
+      },
+      setType(type: SessionType) {
+        set({ type })
       },
     })),
     {
-      name: 'session-storage',
+      name: 'app-storage',
       version: 1,
+      partialize: () => ({}),
     }
   )
 )

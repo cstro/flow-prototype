@@ -12,12 +12,15 @@ import {
   Stack,
 } from '@chakra-ui/react'
 import { getAuth } from 'firebase/auth'
+import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth'
 import firebaseApp from '../../services/firebase/app'
 import { PasswordField } from '../../components/password-field'
 
 const SignUpForm = (props: HTMLChakraProps<'form'>) => {
+  const router = useRouter()
+
   const auth = getAuth(firebaseApp)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -30,7 +33,9 @@ const SignUpForm = (props: HTMLChakraProps<'form'>) => {
       onSubmit={async (e) => {
         e.preventDefault()
         await createUserWithEmailAndPassword(email, password)
-        console.log('done', user)
+        if (user) {
+          router.push('/')
+        }
       }}
       {...props}
     >
@@ -64,7 +69,7 @@ const SignUpForm = (props: HTMLChakraProps<'form'>) => {
           size="lg"
           fontSize="md"
         >
-          Sign in
+          Create account
         </Button>
       </Stack>
     </chakra.form>

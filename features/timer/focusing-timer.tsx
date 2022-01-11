@@ -10,7 +10,10 @@ const FocusingTimer = () => {
   const totalTimeInSeconds = focusDuration * 60
   const timeLeftInSeconds = timeLeft.minutes * 60 + timeLeft.seconds
 
-  const progress = 1 - timeLeftInSeconds / totalTimeInSeconds + 0.5
+  const progress =
+    timeLeftInSeconds === 0
+      ? 1.5
+      : Math.max(1 - timeLeftInSeconds / totalTimeInSeconds, 0.1)
 
   let size = '100vw'
   if (window.innerHeight > window.innerWidth) {

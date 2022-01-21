@@ -2,7 +2,6 @@ import {
   getFirestore,
   collection,
   addDoc,
-  doc,
   query,
   where,
   getDocs,
@@ -25,9 +24,9 @@ export const createSession = async (params: {
   duration: number
   type: SessionType
 }) => {
-  const userDocRef = getUserDocRef()
+  const userId = auth.currentUser?.uid
 
-  if (!userDocRef) {
+  if (!userId) {
     return null
   }
 
@@ -35,7 +34,7 @@ export const createSession = async (params: {
 
   try {
     const docRef = await addDoc(collection(db, 'sessions'), {
-      user: userDocRef,
+      user: userId,
       createdAt: Timestamp.fromDate(createdAt),
       ...otherParams,
     })
@@ -52,14 +51,14 @@ export const createSession = async (params: {
  * If the user isn't authenticated then return null.
  */
 export const fetchSessions = async () => {
-  const userDocRef = getUserDocRef()
+  const userId = auth.currentUser?.uid
 
-  if (!userDocRef) {
+  if (!userId) {
     return []
   }
 
   const sessionsDocSnap = await getDocs(
-    query(collection(db, 'sessions'), where('user', '==', userDocRef))
+    query(collection(db, 'sessions'), where('user', '==', userId))
   )
 
   return sessionsDocSnap.docs
@@ -71,14 +70,18 @@ export const fetchSessions = async () => {
  * If the user isn't authenticated then return null.
  */
 export const fetchAllSessions = async () => {
-  const userDocRef = getUserDocRef()
+  const userId = auth.currentUser?.uid
 
-  if (!userDocRef) {
+  if (!userId) {
     return []
   }
 
   const sessionsDocSnap = await getDocs(
-    query(collection(db, 'sessions'), orderBy('createdAt', 'desc'))
+    query(
+      collection(db, 'sessions'),
+      orderBy('createdAt', 'desc'),
+      where('user', '==', userId)
+    )
   )
 
   return sessionsDocSnap.docs.map(
@@ -89,19 +92,4 @@ export const fetchAllSessions = async () => {
         createdAt: doc.data().createdAt.toDate(),
       } as Session)
   )
-}
-
-/**
- * Build the firestore reference for the current logged in user.
- *
- * If the user isn't authenticated then return null.
- */
-const getUserDocRef = () => {
-  const userId = auth.currentUser?.uid
-
-  if (!userId) {
-    return null
-  }
-
-  return doc(db, 'users', userId)
 }

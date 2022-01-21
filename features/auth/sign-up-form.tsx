@@ -25,7 +25,7 @@ const SignUpForm = (props: HTMLChakraProps<'form'>) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const [createUserWithEmailAndPassword, user, loading, error] =
+  const [createUserWithEmailAndPassword, loading, error] =
     useCreateUserWithEmailAndPassword(auth)
 
   return (
@@ -33,9 +33,7 @@ const SignUpForm = (props: HTMLChakraProps<'form'>) => {
       onSubmit={async (e) => {
         e.preventDefault()
         await createUserWithEmailAndPassword(email, password)
-        if (user) {
-          router.push('/')
-        }
+        router.push('/')
       }}
       {...props}
     >
@@ -63,7 +61,7 @@ const SignUpForm = (props: HTMLChakraProps<'form'>) => {
           onChange={(e) => setPassword(e.target.value)}
         />
         <Button
-          isLoading={loading}
+          isLoading={Boolean(loading)}
           type="submit"
           colorScheme="blue"
           size="lg"

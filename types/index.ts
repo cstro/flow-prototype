@@ -8,4 +8,5 @@ export type Session = {
   createdAt: Date
   duration: number
   type: SessionType
+  user: string
 }

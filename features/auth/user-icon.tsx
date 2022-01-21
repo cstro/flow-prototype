@@ -1,5 +1,6 @@
 import { Avatar } from '@chakra-ui/react'
 import { useAuthState } from 'react-firebase-hooks/auth'
+import { Link } from '../../components/link'
 import firebaseAuth from '../../services/firebase/auth'
 
 const UserIcon = () => {
@@ -8,7 +9,7 @@ const UserIcon = () => {
   if (user) {
     return (
       <Avatar
-        pos="absolute"
+        pos="fixed"
         top="5"
         left="5"
         name={user.email ?? ''}
@@ -17,7 +18,11 @@ const UserIcon = () => {
     )
   }
 
-  return null
+  return (
+    <Link pos="absolute" top="5" left="5" href="/login">
+      Login
+    </Link>
+  )
 }
 
 export default UserIcon

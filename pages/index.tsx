@@ -1,6 +1,5 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import UserIcon from '../features/auth/user-icon'
 import BreakTimer from '../features/timer/break-timer'
 import FocusingTimer from '../features/timer/focusing-timer'
 import InitialStateTimer from '../features/timer/initial-state-timer'
@@ -19,7 +18,6 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        <UserIcon />
         {status === TimerStatus.off && <InitialStateTimer />}
         {status === TimerStatus.tracking && type === SessionType.focus && (
           <FocusingTimer />

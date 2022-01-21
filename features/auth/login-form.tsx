@@ -21,16 +21,14 @@ export const LoginForm = (props: HTMLChakraProps<'form'>) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const [user, loading] = useAuthState(auth)
+  const [loading] = useAuthState(auth)
 
   return (
     <chakra.form
       onSubmit={async (e) => {
         e.preventDefault()
         await signInWithEmailAndPassword(auth, email, password)
-        if (user) {
-          router.push('/')
-        }
+        router.push('/')
       }}
       {...props}
     >

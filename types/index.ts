@@ -1,12 +1,11 @@
 export enum SessionType {
-  focus,
-  break,
+  focus = 'focus',
+  break = 'break',
 }
 
 export type Session = {
   id: string
-  from: number
-  to: number
+  createdAt: Date
+  duration: number
   type: SessionType
-  completed?: boolean
 }

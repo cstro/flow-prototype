@@ -1,4 +1,9 @@
 import { getAuth } from 'firebase/auth'
+import { useAuthState as baseUseAuthState } from 'react-firebase-hooks/auth'
 import firebaseApp from './app'
 
-export default getAuth(firebaseApp)
+const auth = getAuth(firebaseApp)
+
+export const useAuthState = () => baseUseAuthState(auth)
+
+export default auth

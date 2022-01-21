@@ -1,6 +1,7 @@
 import { Button } from '@chakra-ui/react'
 import { addMinutes } from 'date-fns'
 import useSound from 'use-sound'
+import { createSession } from '../../services/firebase/firestore'
 import useSessionStore from '../../store'
 import useSettingsStore from '../../store/useSettingsStore'
 import { SessionType } from '../../types'
@@ -27,6 +28,12 @@ const BeginBreakButton = () => {
 
     const calculatedTimeLeft = getTimeLeft(endTime)
     setTimeLeft(calculatedTimeLeft)
+
+    createSession({
+      createdAt: now,
+      duration: breakDuration,
+      type: SessionType.break,
+    })
 
     const interval = setInterval(() => {
       const calculatedTimeLeft = getTimeLeft(endTime)

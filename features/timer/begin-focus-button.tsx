@@ -1,6 +1,7 @@
 import { Button } from '@chakra-ui/react'
 import { addMinutes } from 'date-fns'
 import useSound from 'use-sound'
+import { createSession } from '../../services/firebase/firestore'
 import useSessionStore from '../../store'
 import useSettingsStore from '../../store/useSettingsStore'
 import { SessionType } from '../../types'
@@ -28,6 +29,12 @@ const BeginFocusButton = () => {
 
     const calculatedTimeLeft = getTimeLeft(endTime)
     setTimeLeft(calculatedTimeLeft)
+
+    createSession({
+      createdAt: now,
+      duration: focusDuration,
+      type: SessionType.focus,
+    })
 
     const interval = setInterval(() => {
       const calculatedTimeLeft = getTimeLeft(endTime)

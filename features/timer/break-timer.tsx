@@ -11,23 +11,30 @@ const BreakTimer = () => {
   const totalTimeInSeconds = breakDuration * 60
   const timeLeftInSeconds = timeLeft.minutes * 60 + timeLeft.seconds
 
-  const progress =
-    timeLeftInSeconds === totalTimeInSeconds
-      ? 2.5
-      : timeLeftInSeconds / totalTimeInSeconds + 0.1
+  const baseSize = 0.25
+  const progressSpan = 1 - baseSize
+  const progress = timeLeftInSeconds / totalTimeInSeconds
 
-  const size = `${progress * 100}vmax`
-  const size2 = `${progress * 1.1 * 100}vmax`
+  const size = baseSize + progressSpan * progress
 
   return (
     <>
-      <Box w={size} h={size} transition="all 1000ms linear" pos="fixed">
+      <Box
+        w={`150vmax`}
+        h={`150vmax`}
+        transition="transform 500ms linear"
+        transform={`scale(${size})`}
+        pos="fixed"
+        willChange="transform"
+      >
         <AnimatingBlob bg="#FBADC5" />
       </Box>
       <Box
-        w={size2}
-        h={size2}
-        transition="all 1000ms linear"
+        w={`150vmax`}
+        h={`150vmax`}
+        transition="transform 500ms linear"
+        transform={`scale(${size + 0.015})`}
+        willChange="transform"
         pos="fixed"
         opacity="0.1"
       >

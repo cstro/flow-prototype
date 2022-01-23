@@ -2,44 +2,70 @@ import { useEffect, useState } from 'react'
 import spline from '../utils/spline'
 import SimplexNoise from 'simplex-noise'
 
-const points = createPoints()
 const simplex = new SimplexNoise()
 
-const noiseStep = 0.00025
+const noiseStep = 0.0015
+
+type Point = {
+  x: number
+  y: number
+
+  originX: number
+  originY: number
+
+  noiseOffsetX: number
+  noiseOffsetY: number
+}
 
 function noise(x: number, y: number) {
   return simplex.noise2D(x, y)
 }
 
 const AnimatingBlob = (props: { bg: string }) => {
+  const [points, setPoints] = useState<Point[]>([])
+
+  useEffect(() => {
+    setPoints(createPoints())
+  }, [])
+
   const { bg } = props
   const [path, setPath] = useState<string>('')
 
-  function animate() {
-    setPath(spline(points, 1, true))
+  useEffect(() => {
+    let cancel = false
 
-    for (let i = 0; i < points.length; i++) {
-      const point = points[i]
+    function animate() {
+      if (cancel) {
+        return
+      }
 
-      const nX = noise(point.noiseOffsetX, point.noiseOffsetX)
-      const nY = noise(point.noiseOffsetY, point.noiseOffsetY)
+      setPath(spline(points, 1, true))
 
-      const x = map(nX, -1, 1, point.originX - 5, point.originX + 15)
-      const y = map(nY, -1, 1, point.originY - 5, point.originY + 15)
+      for (let i = 0; i < points.length; i++) {
+        const point = points[i]
 
-      point.x = x
-      point.y = y
+        const nX = noise(point.noiseOffsetX, point.noiseOffsetX)
+        const nY = noise(point.noiseOffsetY, point.noiseOffsetY)
 
-      point.noiseOffsetX += noiseStep
-      point.noiseOffsetY += noiseStep
+        const x = map(nX, -1, 1, point.originX - 5, point.originX + 5)
+        const y = map(nY, -1, 1, point.originY - 5, point.originY + 5)
+
+        point.x = x
+        point.y = y
+
+        point.noiseOffsetX += noiseStep
+        point.noiseOffsetY += noiseStep
+      }
+
+      requestAnimationFrame(animate)
     }
 
-    requestAnimationFrame(animate)
-  }
-
-  useEffect(() => {
     animate()
-  }, [])
+
+    return () => {
+      cancel = true
+    }
+  }, [points])
 
   return (
     <div>
@@ -59,11 +85,11 @@ const AnimatingBlob = (props: { bg: string }) => {
 function createPoints() {
   const points = []
 
-  const numPoints = 7
+  const numPoints = 8
 
   const angleStep = (Math.PI * 2) / numPoints
 
-  const rad = 75
+  const rad = 90
 
   for (let i = 1; i <= numPoints; i++) {
     const theta = i * angleStep

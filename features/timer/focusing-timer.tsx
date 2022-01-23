@@ -11,28 +11,53 @@ const FocusingTimer = () => {
   const totalTimeInSeconds = focusDuration * 60
   const timeLeftInSeconds = timeLeft.minutes * 60 + timeLeft.seconds
 
-  const progress =
-    timeLeftInSeconds === 0
-      ? 2.5
-      : Math.max(1 - timeLeftInSeconds / totalTimeInSeconds, 0.1)
+  const baseSize = 0.25
+  const progressSpan = 1 - baseSize
+  const progress = 1 - timeLeftInSeconds / totalTimeInSeconds
 
-  const size = `${progress * 100}vmax`
-  const size2 = `${progress * 1.1 * 100}vmax`
+  const size = baseSize + progressSpan * progress
+
+  console.log(baseSize, progressSpan, progress, size)
 
   return (
     <>
-      <Box w={size} h={size} transition="all 1000ms linear" pos="fixed">
-        <AnimatingBlob bg="#126BFB" />
-      </Box>
+      {(timeLeft.minutes !== 0 || timeLeft.seconds !== 0) && (
+        <>
+          <Box
+            w={`150vmax`}
+            h={`150vmax`}
+            transition="transform 500ms linear"
+            transform={`scale(${size})`}
+            pos="fixed"
+            willChange="transform"
+          >
+            <AnimatingBlob bg="#126BFB" />
+          </Box>
+          <Box
+            w={`150vmax`}
+            h={`150vmax`}
+            transition="transform 500ms linear"
+            transform={`scale(${size + 0.015})`}
+            willChange="transform"
+            pos="fixed"
+            opacity="0.1"
+          >
+            <AnimatingBlob bg="#126BFB" />
+          </Box>
+        </>
+      )}
       <Box
-        w={size2}
-        h={size2}
-        transition="all 1000ms linear"
+        w={`150vmax`}
+        h={`150vmax`}
+        transition="transform 2500ms linear"
+        transform={`scale(${
+          timeLeft.minutes === 0 && timeLeft.seconds < 4 ? size : 0
+        })`}
+        willChange="transform"
         pos="fixed"
-        opacity="0.1"
-      >
-        <AnimatingBlob bg="#126BFB" />
-      </Box>
+        bg="blue.500"
+        borderRadius="50%"
+      />
       {timeLeft.minutes === 0 && timeLeft.seconds === 0 && (
         <Stack pos="fixed" spacing="4" align="center">
           <Text fontSize="lg" color="white">

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import { useAuthState } from '../services/firebase/auth'
-import { fetchAllSessions } from '../services/firebase/firestore'
-import { Session } from '../types'
+import { useAuthState } from '@/services/firebase/auth'
+import { fetchAllSessions } from '@/services/firebase/firestore'
+import { Session } from '@/types/session'
 
 const useAllSessions = () => {
   const [isLoading, setIsLoading] = useState(true)

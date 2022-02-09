@@ -1,8 +1,8 @@
 import create, { GetState, SetState } from 'zustand'
 import { devtools, persist, StoreApiWithPersist } from 'zustand/middleware'
-import { SessionType } from '../types'
+import { SessionType } from '@/types/session'
 
-import { TimerStatus, Time } from '../types/timer'
+import { TimerStatus, Time } from '@/types/timer'
 
 type StoreState = {
   status: TimerStatus

@@ -11,9 +11,9 @@ import {
 } from '@chakra-ui/react'
 import { format, getUnixTime, isSameDay } from 'date-fns'
 import type { NextPage } from 'next'
-import { Link } from '../components/link'
-import useAllSessions from '../hooks/useAllSessions'
-import { Session } from '../types'
+import { Link } from '@/components/link'
+import useAllSessions from '@/hooks/useAllSessions'
+import { Session } from '@/types/session'
 
 const Session: NextPage = () => {
   const { isLoading, sessions } = useAllSessions()

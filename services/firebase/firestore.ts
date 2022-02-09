@@ -9,7 +9,7 @@ import {
   orderBy,
 } from 'firebase/firestore'
 import auth from './auth'
-import { SessionType, Session } from '../../types'
+import { SessionType, Session } from '@/types/session'
 import './app'
 
 const db = getFirestore()

@@ -1,5 +1,5 @@
 import { differenceInMilliseconds } from 'date-fns'
-import { Time } from '../types/timer'
+import { Time } from '@/types/timer'
 
 export const getTimeLeft = (endTime: Date) => {
   const difference = differenceInMilliseconds(endTime, new Date())

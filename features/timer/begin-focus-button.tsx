@@ -1,12 +1,12 @@
 import { Button } from '@chakra-ui/react'
 import { addMinutes } from 'date-fns'
 import useSound from 'use-sound'
-import { createSession } from '../../services/firebase/firestore'
-import useSessionStore from '../../store'
-import useSettingsStore from '../../store/useSettingsStore'
-import { SessionType } from '../../types'
-import { TimerStatus } from '../../types/timer'
-import { getTimeLeft } from '../../utils'
+import { createSession } from '@/services/firebase/firestore'
+import useSessionStore from '@/store/useSessionStore'
+import useSettingsStore from '@/store/useSettingsStore'
+import { SessionType } from '@/types/session'
+import { TimerStatus } from '@/types/timer'
+import { getTimeLeft } from '@/utils/time'
 
 const BeginFocusButton = () => {
   const { setStatus, setTimeLeft, setType } = useSessionStore()

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import spline from '../utils/spline'
+import spline from '@/utils/spline'
 import SimplexNoise from 'simplex-noise'
 
 const simplex = new SimplexNoise()

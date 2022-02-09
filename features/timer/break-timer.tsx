@@ -1,7 +1,7 @@
 import { Box, Stack, Text } from '@chakra-ui/react'
-import AnimatingBlob from '../../components/animating-blob'
-import useSessionStore from '../../store'
-import useSettingsStore from '../../store/useSettingsStore'
+import AnimatingBlob from '@/components/animating-blob'
+import useSessionStore from '@/store/useSessionStore'
+import useSettingsStore from '@/store/useSettingsStore'
 import BeginFocusButton from './begin-focus-button'
 
 const BreakTimer = () => {

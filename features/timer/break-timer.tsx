@@ -1,21 +1,24 @@
 import { Box, Stack, Text } from '@chakra-ui/react'
 import AnimatingBlob from '@/components/animating-blob'
-import useSessionStore from '@/store/useSessionStore'
 import useSettingsStore from '@/store/useSettingsStore'
 import BeginFocusButton from './begin-focus-button'
+import useTimer from '@/hooks/useTimer'
+import { humanizeTimeLeft } from '@/utils/time'
 
 const BreakTimer = () => {
-  const { timeLeft } = useSessionStore()
+  const { timeLeft } = useTimer()
   const { breakDuration } = useSettingsStore()
 
   const totalTimeInSeconds = breakDuration
   const timeLeftInSeconds = timeLeft.minutes * 60 + timeLeft.seconds
 
-  const baseSize = 0.25
+  const baseSize = 0.2
   const progressSpan = 1 - baseSize
-  const progress = timeLeftInSeconds / totalTimeInSeconds
+  const progress = Math.max(timeLeftInSeconds, 0) / totalTimeInSeconds
 
   const size = baseSize + progressSpan * progress
+
+  const done = timeLeft.minutes <= 0 && timeLeft.seconds <= 0
 
   return (
     <>
@@ -40,11 +43,16 @@ const BreakTimer = () => {
       >
         <AnimatingBlob bg="#FBADC5" />
       </Box>
-      {timeLeft.minutes === 0 && timeLeft.seconds === 0 && (
-        <Stack pos="fixed" spacing="4" align="center">
+      {done && (
+        <Stack pos="fixed" spacing="2" align="center">
           <Text fontSize="lg" color="white">
-            Session complete
+            Break over!
           </Text>
+          {timeLeft.minutes < 0 && (
+            <Text fontSize="lg" color="white" p="2" borderRadius="2">
+              {humanizeTimeLeft(timeLeft)}
+            </Text>
+          )}
           <BeginFocusButton />
         </Stack>
       )}

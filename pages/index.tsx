@@ -24,6 +24,7 @@ const Home: NextPage = () => {
     timePaused,
     type,
     timeLeft,
+    notifiedAt,
   } = useTimer()
 
   return (
@@ -62,6 +63,7 @@ const Home: NextPage = () => {
           <Text>Original End Time: {humanizeDateAsTime(originalEndTime)}</Text>
           <Text>Time Paused: {humanizeSeconds(timePaused)}</Text>
           <Text>End Time: {humanizeDateAsTime(endTime)}</Text>
+          <Text>Notified at: {humanizeDateAsTime(notifiedAt)}</Text>
         </Stack>
       </Box>
     </>

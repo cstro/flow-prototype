@@ -13,17 +13,17 @@ const FocusingTimer = () => {
   const totalTimeInSeconds = focusDuration
   const timeLeftInSeconds = timeLeft.minutes * 60 + timeLeft.seconds
 
-  const baseSize = 0.25
+  const baseSize = 0.2
   const progressSpan = 1 - baseSize
   const progress = 1 - timeLeftInSeconds / totalTimeInSeconds
 
   const size = baseSize + progressSpan * progress
 
-  const done = timeLeft.minutes === 0 && timeLeft.seconds === 0
+  const done = timeLeft.minutes <= 0 && timeLeft.seconds <= 0
 
   return (
     <>
-      {(timeLeft.minutes !== 0 || timeLeft.seconds !== 0) && (
+      {!done && (
         <>
           <Box
             w={`150vmax`}
@@ -53,7 +53,7 @@ const FocusingTimer = () => {
         h={`150vmax`}
         transition="transform 2500ms linear"
         transform={`scale(${
-          timeLeft.minutes === 0 && timeLeft.seconds < 4 ? size : 0
+          timeLeft.minutes <= 0 && timeLeft.seconds <= 4 ? size : 0
         })`}
         willChange="transform"
         pos="fixed"
@@ -76,7 +76,7 @@ const FocusingTimer = () => {
           </Button>
           {timeLeft.minutes < 2 && (
             <Text fontSize="lg" color="white" p="2" borderRadius="2">
-              {humanizeTimeLeft(timeLeft)}
+              {humanizeTimeLeft(timeLeft)} minutes remaining
             </Text>
           )}
         </Stack>
@@ -86,6 +86,11 @@ const FocusingTimer = () => {
           <Text fontSize="lg" color="white">
             Session complete
           </Text>
+          {timeLeft.minutes < 0 && (
+            <Text fontSize="lg" color="white" p="2" borderRadius="2">
+              {humanizeTimeLeft(timeLeft)}
+            </Text>
+          )}
           <BeginBreakButton />
         </Stack>
       )}

@@ -17,6 +17,7 @@ export type Timer = {
   isBreak?: boolean
   state: TimerState
   type: SessionType
+  notifiedAt?: Date
   start: (durationInSeconds: number, sessionType: SessionType) => void
   pause: () => void
   resume: () => void

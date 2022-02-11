@@ -3,7 +3,7 @@ import TimerContext, { Timer } from './timer-context'
 import { createSession } from '@/services/firebase/firestore'
 import { Time, TimerState } from '@/types/timer'
 import { getTimeLeft } from '@/utils/time'
-import { addSeconds, differenceInSeconds } from 'date-fns'
+import { addSeconds, differenceInMinutes, differenceInSeconds } from 'date-fns'
 import { useEffect, useState } from 'react'
 import useSound from 'use-sound'
 import { SessionType } from '@/types/session'
@@ -13,13 +13,13 @@ function TimerProvider(props: { children: ReactNode }) {
 
   const [state, setState] = useState<TimerState>('stopped')
   const [type, setType] = useState<SessionType>('focus')
-  // TODO: Is defaulting the dates to 'now' a good idea?
   const [startTime, setStartTime] = useState<Date>()
   const [originalEndTime, setOriginalEndTime] = useState<Date>()
   const [endTime, setEndTime] = useState<Date>()
   const [duration, setDuration] = useState<number>(0)
   const [timeLeft, setTimeLeft] = useState<Time>({ minutes: 0, seconds: 0 })
   const [lastPausedAt, setLastPausedAt] = useState<Date>()
+  const [notifiedAt, setNotifiedAt] = useState<Date>()
   const [timePaused, setTimePaused] = useState<number>(0)
 
   const isPaused = state === 'paused'
@@ -34,11 +34,17 @@ function TimerProvider(props: { children: ReactNode }) {
 
     const endTime = addSeconds(now, durationInSeconds)
     const calculatedTimeLeft = getTimeLeft(endTime)
+
     setTimeLeft(calculatedTimeLeft)
     setStartTime(now)
     setEndTime(endTime)
     setOriginalEndTime(endTime)
     setDuration(durationInSeconds)
+
+    setNotifiedAt(undefined)
+    setLastPausedAt(undefined)
+    setTimePaused(0)
+
     setType(sessionType)
     setState('running')
 
@@ -70,11 +76,18 @@ function TimerProvider(props: { children: ReactNode }) {
   }, [originalEndTime, timePaused])
 
   useEffect(() => {
-    if (isRunning && timeLeft?.minutes === 0 && timeLeft?.seconds === 0) {
+    const isDone = isRunning && timeLeft.minutes <= 0 && timeLeft.seconds <= 0
+
+    const notNotifiedInLastFiveMinutes =
+      !notifiedAt || differenceInMinutes(new Date(), notifiedAt) >= 5
+
+    if (isDone && notNotifiedInLastFiveMinutes) {
       chime()
-      new Notification('Take a break')
+      const message = type === 'focus' ? 'Take a break' : 'Back to work'
+      new Notification(message)
+      setNotifiedAt(new Date())
     }
-  }, [chime, timeLeft, isRunning])
+  }, [chime, timeLeft, isRunning, notifiedAt, type])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -97,6 +110,7 @@ function TimerProvider(props: { children: ReactNode }) {
     duration,
     originalEndTime,
     endTime,
+    notifiedAt,
     timePaused,
     timeLeft,
     isPaused,

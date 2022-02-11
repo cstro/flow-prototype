@@ -13,7 +13,7 @@ const FocusingTimer = () => {
   const totalTimeInSeconds = focusDuration
   const timeLeftInSeconds = timeLeft.minutes * 60 + timeLeft.seconds
 
-  const baseSize = 0.2
+  const baseSize = 0.1
   const progressSpan = 1 - baseSize
   const progress = 1 - timeLeftInSeconds / totalTimeInSeconds
 

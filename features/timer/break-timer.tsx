@@ -12,7 +12,7 @@ const BreakTimer = () => {
   const totalTimeInSeconds = breakDuration
   const timeLeftInSeconds = timeLeft.minutes * 60 + timeLeft.seconds
 
-  const baseSize = 0.2
+  const baseSize = 0.1
   const progressSpan = 1 - baseSize
   const progress = Math.max(timeLeftInSeconds, 0) / totalTimeInSeconds
 

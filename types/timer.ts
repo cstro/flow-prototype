@@ -3,8 +3,4 @@ export type Time = {
   seconds: number
 }
 
-export enum TimerStatus {
-  tracking,
-  paused,
-  off,
-}
+export type TimerState = 'paused' | 'running' | 'stopped'

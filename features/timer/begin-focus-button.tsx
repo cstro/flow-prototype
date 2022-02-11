@@ -1,57 +1,15 @@
 import { Button } from '@chakra-ui/react'
-import { addMinutes } from 'date-fns'
-import useSound from 'use-sound'
-import { createSession } from '@/services/firebase/firestore'
-import useSessionStore from '@/store/useSessionStore'
 import useSettingsStore from '@/store/useSettingsStore'
-import { SessionType } from '@/types/session'
-import { TimerStatus } from '@/types/timer'
-import { getTimeLeft } from '@/utils/time'
+import useTimer from '@/hooks/useTimer'
 
 const BeginFocusButton = () => {
-  const { setStatus, setTimeLeft, setType } = useSessionStore()
   const { focusDuration } = useSettingsStore()
-  const [chime] = useSound('/sounds/chime.mp3')
+
+  const { start } = useTimer()
 
   const beginSession = async () => {
     await Notification.requestPermission()
-
-    // TODO: Fix the status being stuck in tracking.
-    // if (status === TimerStatus.tracking) {
-    //   return
-    // }
-
-    setStatus(TimerStatus.tracking)
-    setType(SessionType.focus)
-
-    const now = new Date()
-    const endTime = addMinutes(now, focusDuration)
-
-    const calculatedTimeLeft = getTimeLeft(endTime)
-    setTimeLeft(calculatedTimeLeft)
-
-    createSession({
-      createdAt: now,
-      duration: focusDuration,
-      type: SessionType.focus,
-    })
-
-    const interval = setInterval(() => {
-      const calculatedTimeLeft = getTimeLeft(endTime)
-      setTimeLeft(calculatedTimeLeft)
-      console.debug(calculatedTimeLeft)
-
-      if (
-        calculatedTimeLeft.minutes === 0 &&
-        calculatedTimeLeft.seconds === 0
-      ) {
-        setTimeout(async () => {
-          chime()
-          new Notification('Take a break')
-        }, 1000)
-        clearInterval(interval)
-      }
-    }, 200)
+    start(focusDuration, 'focus')
   }
 
   return (

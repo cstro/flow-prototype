@@ -1,14 +1,16 @@
-import { Box, Text, Stack } from '@chakra-ui/react'
+import { Box, Text, Stack, Button } from '@chakra-ui/react'
 import AnimatingBlob from '@/components/animating-blob'
-import useSessionStore from '@/store/useSessionStore'
 import useSettingsStore from '@/store/useSettingsStore'
 import BeginBreakButton from './begin-break-button'
+import { humanizeTimeLeft } from '@/utils/time'
+import useTimer from '@/hooks/useTimer'
 
 const FocusingTimer = () => {
-  const { timeLeft } = useSessionStore()
   const { focusDuration } = useSettingsStore()
 
-  const totalTimeInSeconds = focusDuration * 60
+  const { pause, resume, timeLeft, isPaused } = useTimer()
+
+  const totalTimeInSeconds = focusDuration
   const timeLeftInSeconds = timeLeft.minutes * 60 + timeLeft.seconds
 
   const baseSize = 0.25
@@ -17,7 +19,7 @@ const FocusingTimer = () => {
 
   const size = baseSize + progressSpan * progress
 
-  console.log(baseSize, progressSpan, progress, size)
+  const done = timeLeft.minutes === 0 && timeLeft.seconds === 0
 
   return (
     <>
@@ -31,7 +33,7 @@ const FocusingTimer = () => {
             pos="fixed"
             willChange="transform"
           >
-            <AnimatingBlob bg="#126BFB" />
+            <AnimatingBlob bg="#126BFB" paused={isPaused} />
           </Box>
           <Box
             w={`150vmax`}
@@ -42,7 +44,7 @@ const FocusingTimer = () => {
             pos="fixed"
             opacity="0.1"
           >
-            <AnimatingBlob bg="#126BFB" />
+            <AnimatingBlob bg="#126BFB" paused={isPaused} />
           </Box>
         </>
       )}
@@ -58,7 +60,28 @@ const FocusingTimer = () => {
         bg="blue.500"
         borderRadius="50%"
       />
-      {timeLeft.minutes === 0 && timeLeft.seconds === 0 && (
+      {!done && (
+        <Stack pos="fixed" align="center" bottom="10">
+          <Button
+            onClick={() => (isPaused ? resume() : pause())}
+            variant="outline"
+            colorScheme="blue"
+            size="lg"
+            width="244px"
+            height="56px"
+            borderRadius="50px"
+            fontSize="13px"
+          >
+            {isPaused ? 'Resume' : 'Pause'} Focus
+          </Button>
+          {timeLeft.minutes < 2 && (
+            <Text fontSize="lg" color="white" p="2" borderRadius="2">
+              {humanizeTimeLeft(timeLeft)}
+            </Text>
+          )}
+        </Stack>
+      )}
+      {done && (
         <Stack pos="fixed" spacing="4" align="center">
           <Text fontSize="lg" color="white">
             Session complete

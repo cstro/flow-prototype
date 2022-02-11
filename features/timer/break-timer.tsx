@@ -8,7 +8,7 @@ const BreakTimer = () => {
   const { timeLeft } = useSessionStore()
   const { breakDuration } = useSettingsStore()
 
-  const totalTimeInSeconds = breakDuration * 60
+  const totalTimeInSeconds = breakDuration
   const timeLeftInSeconds = timeLeft.minutes * 60 + timeLeft.seconds
 
   const baseSize = 0.25

@@ -14,8 +14,8 @@ const useSettingsStore = create<
 >(
   persist(
     devtools(() => ({
-      focusDuration: 25,
-      breakDuration: 5,
+      focusDuration: 25 * 60,
+      breakDuration: 5 * 60,
     })),
     {
       name: 'app-storage',

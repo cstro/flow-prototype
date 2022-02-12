@@ -7,6 +7,7 @@ import { addSeconds, differenceInMinutes, differenceInSeconds } from 'date-fns'
 import { useEffect, useState } from 'react'
 import useSound from 'use-sound'
 import { SessionType } from '@/types/session'
+import useSettingsStore from '@/store/useSettingsStore'
 
 function TimerProvider(props: { children: ReactNode }) {
   const [chime] = useSound('/sounds/chime.mp3')
@@ -21,6 +22,8 @@ function TimerProvider(props: { children: ReactNode }) {
   const [lastPausedAt, setLastPausedAt] = useState<Date>()
   const [notifiedAt, setNotifiedAt] = useState<Date>()
   const [timePaused, setTimePaused] = useState<number>(0)
+
+  const { breakDuration, focusDuration } = useSettingsStore()
 
   const isPaused = state === 'paused'
   const isRunning = state === 'running'
@@ -67,6 +70,18 @@ function TimerProvider(props: { children: ReactNode }) {
       )
     }
     setState('running')
+  }
+
+  const skip = () => {
+    if (type === 'break') {
+      start(focusDuration, 'focus')
+    } else {
+      start(breakDuration, 'break')
+    }
+  }
+
+  const stop = () => {
+    setState('stopped')
   }
 
   useEffect(() => {
@@ -121,8 +136,10 @@ function TimerProvider(props: { children: ReactNode }) {
     start,
     pause,
     resume,
+    skip,
     state,
     startTime,
+    stop,
     type,
   }
 

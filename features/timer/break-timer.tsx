@@ -1,12 +1,13 @@
-import { Box, Stack, Text } from '@chakra-ui/react'
+import { Box, Button, Stack, Text } from '@chakra-ui/react'
 import AnimatingBlob from '@/components/animating-blob'
 import useSettingsStore from '@/store/useSettingsStore'
 import BeginFocusButton from './begin-focus-button'
 import useTimer from '@/hooks/useTimer'
 import { humanizeTimeLeft } from '@/utils/time'
+import { format } from 'date-fns'
 
 const BreakTimer = () => {
-  const { timeLeft } = useTimer()
+  const { timeLeft, endTime, stop } = useTimer()
   const { breakDuration } = useSettingsStore()
 
   const totalTimeInSeconds = breakDuration
@@ -54,6 +55,23 @@ const BreakTimer = () => {
             </Text>
           )}
           <BeginFocusButton />
+        </Stack>
+      )}
+      {!done && (
+        <Text
+          pos="fixed"
+          textTransform="uppercase"
+          color="#F5F2ED"
+          fontWeight="500"
+          fontSize="14px"
+        >
+          Stand up and stretch you lazy fuck
+        </Text>
+      )}
+      {!done && (
+        <Stack pos="fixed" spacing="2" bottom="10" align="center">
+          <Button onClick={stop}>End Session</Button>
+          {endTime && <Text>Ends at {format(endTime, 'hh:mm')}</Text>}
         </Stack>
       )}
     </>

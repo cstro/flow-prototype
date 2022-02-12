@@ -14,15 +14,7 @@ const BeginBreakButton = () => {
 
   return (
     <>
-      <Button
-        colorScheme="pink"
-        size="lg"
-        width="244px"
-        height="56px"
-        borderRadius="50px"
-        fontSize="13px"
-        onClick={beginSession}
-      >
+      <Button colorScheme="pink" onClick={beginSession}>
         Begin Break
       </Button>
     </>

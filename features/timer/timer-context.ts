@@ -21,6 +21,8 @@ export type Timer = {
   start: (durationInSeconds: number, sessionType: SessionType) => void
   pause: () => void
   resume: () => void
+  stop: () => void
+  skip: () => void
 }
 
 const timerContext = createContext<Timer>({
@@ -32,6 +34,8 @@ const timerContext = createContext<Timer>({
   start: noop,
   pause: noop,
   resume: noop,
+  stop: noop,
+  skip: noop,
 })
 
 export default timerContext

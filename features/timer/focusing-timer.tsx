@@ -1,14 +1,23 @@
-import { Box, Text, Stack, Button } from '@chakra-ui/react'
+import {
+  Box,
+  Text,
+  Stack,
+  Button,
+  IconButton,
+  Icon,
+  Tooltip,
+} from '@chakra-ui/react'
 import AnimatingBlob from '@/components/animating-blob'
 import useSettingsStore from '@/store/useSettingsStore'
 import BeginBreakButton from './begin-break-button'
 import { humanizeTimeLeft } from '@/utils/time'
 import useTimer from '@/hooks/useTimer'
+import { IoPlaySkipForwardOutline, IoStopOutline } from 'react-icons/io5'
 
 const FocusingTimer = () => {
   const { focusDuration } = useSettingsStore()
 
-  const { pause, resume, timeLeft, isPaused } = useTimer()
+  const { pause, resume, timeLeft, isPaused, stop, skip } = useTimer()
 
   const totalTimeInSeconds = focusDuration
   const timeLeftInSeconds = timeLeft.minutes * 60 + timeLeft.seconds
@@ -62,18 +71,54 @@ const FocusingTimer = () => {
       />
       {!done && (
         <Stack pos="fixed" align="center" bottom="10">
-          <Button
-            onClick={() => (isPaused ? resume() : pause())}
-            variant="outline"
-            colorScheme="blue"
-            size="lg"
-            width="244px"
-            height="56px"
-            borderRadius="50px"
-            fontSize="13px"
-          >
-            {isPaused ? 'Resume' : 'Pause'} Focus
-          </Button>
+          <Stack direction="row" spacing="8" align="center">
+            {isPaused && (
+              <>
+                <Tooltip
+                  hasArrow
+                  placement="bottom"
+                  label="End Session"
+                  bg="black"
+                  color="white"
+                >
+                  <IconButton
+                    variant="ghost"
+                    size="lg"
+                    colorScheme="blue"
+                    width="auto"
+                    borderRadius="50%"
+                    aria-label="End Session"
+                    onClick={stop}
+                    icon={<Icon as={IoStopOutline} />}
+                  />
+                </Tooltip>
+                <Button onClick={resume}>Continue</Button>
+                <Tooltip
+                  hasArrow
+                  placement="bottom"
+                  label="Skip to Break"
+                  bg="black"
+                  color="white"
+                >
+                  <IconButton
+                    variant="ghost"
+                    size="lg"
+                    colorScheme="blue"
+                    width="auto"
+                    borderRadius="50%"
+                    aria-label="End Session"
+                    onClick={skip}
+                    icon={<Icon as={IoPlaySkipForwardOutline} />}
+                  />
+                </Tooltip>
+              </>
+            )}
+            {!isPaused && (
+              <Button colorScheme="gray" onClick={pause}>
+                Pause Focus
+              </Button>
+            )}
+          </Stack>
           {timeLeft.minutes < 2 && (
             <Text fontSize="lg" color="white" p="2" borderRadius="2">
               {humanizeTimeLeft(timeLeft)} minutes remaining
@@ -82,16 +127,47 @@ const FocusingTimer = () => {
         </Stack>
       )}
       {done && (
-        <Stack pos="fixed" spacing="4" align="center">
-          <Text fontSize="lg" color="white">
-            Session complete
+        <Stack
+          pos="fixed"
+          spacing="0"
+          align="center"
+          textAlign="center"
+          maxW="xs"
+        >
+          <Text
+            textTransform="uppercase"
+            fontSize="14px"
+            fontWeight="500"
+            color="#F5F2ED"
+          >
+            Focus time ended
           </Text>
-          {timeLeft.minutes < 0 && (
-            <Text fontSize="lg" color="white" p="2" borderRadius="2">
-              {humanizeTimeLeft(timeLeft)}
-            </Text>
-          )}
+          <Text
+            fontSize="60px"
+            lineHeight="1"
+            color="white"
+            p="2"
+            borderRadius="2"
+          >
+            {humanizeTimeLeft(timeLeft)}
+          </Text>
+          <Text
+            textTransform="uppercase"
+            fontSize="14px"
+            fontWeight="500"
+            color="#F5F2ED"
+          >
+            You can carry on working and we’ll remind you to take break every 5
+            minutes
+          </Text>
+        </Stack>
+      )}
+      {done && (
+        <Stack direction="column" pos="fixed" bottom="10" spacing="4">
           <BeginBreakButton />
+          <Button colorScheme="gray" variant="outline" onClick={stop}>
+            End session
+          </Button>
         </Stack>
       )}
     </>

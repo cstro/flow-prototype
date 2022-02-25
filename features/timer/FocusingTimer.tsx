@@ -40,11 +40,15 @@ const FocusingTimer = () => {
             }}
             w={`150vmax`}
             h={`150vmax`}
-            transition="transform 500ms linear"
+            transition="transform 500ms linear, opacity 120ms ease-in-out"
             pos="fixed"
             willChange="transform"
+            opacity={isPaused ? 0.4 : 1}
           >
-            <AnimatingBlob bg="#126BFB" paused={isPaused} />
+            <AnimatingBlob
+              bg={isPaused ? '#7D8089' : '#126BFB'}
+              paused={isPaused}
+            />
           </Box>
           <Box
             style={{
@@ -52,12 +56,15 @@ const FocusingTimer = () => {
             }}
             w={`150vmax`}
             h={`150vmax`}
-            transition="transform 500ms linear"
+            transition="transform 500ms linear, opacity 120ms ease-in-out"
             willChange="transform"
             pos="fixed"
-            opacity="0.1"
+            opacity={isPaused ? 0.2 : 0.1}
           >
-            <AnimatingBlob bg="#126BFB" paused={isPaused} />
+            <AnimatingBlob
+              bg={isPaused ? '#7D8089' : '#126BFB'}
+              paused={isPaused}
+            />
           </Box>
         </>
       )}

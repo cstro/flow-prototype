@@ -27,7 +27,6 @@ type AnimatingBlobProps = {
 }
 
 const AnimatingBlob = React.memo((props: AnimatingBlobProps) => {
-  console.log('blob render')
   const [points] = useState<Point[]>(createPoints())
 
   const { bg, paused = false } = props

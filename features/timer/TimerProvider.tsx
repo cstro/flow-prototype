@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import TimerContext, { Timer } from './timer-context'
+import TimerContext, { Timer } from './TimerContext'
 import { createSession } from '@/services/firebase/firestore'
 import { Time, TimerState } from '@/types/timer'
 import { getTimeLeft } from '@/utils/time'
@@ -116,7 +116,7 @@ function TimerProvider(props: { children: ReactNode }) {
 
       const calculatedTimeLeft = getTimeLeft(endTime)
       setTimeLeft(calculatedTimeLeft)
-    }, 300)
+    }, 200)
 
     return () => clearInterval(interval)
   }, [isStopped, endTime, isPaused, lastPausedAt, timePaused])

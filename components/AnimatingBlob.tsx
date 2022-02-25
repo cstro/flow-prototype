@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import spline from '@/utils/spline'
 import SimplexNoise from 'simplex-noise'
 
 const simplex = new SimplexNoise()
 
-const noiseStep = 0.0015
+const noiseStep = 0.003
 
 type Point = {
   x: number
@@ -26,26 +26,19 @@ type AnimatingBlobProps = {
   paused?: boolean
 }
 
-const AnimatingBlob = (props: AnimatingBlobProps) => {
-  const [points, setPoints] = useState<Point[]>([])
-
-  useEffect(() => {
-    setPoints(createPoints())
-  }, [])
+const AnimatingBlob = React.memo((props: AnimatingBlobProps) => {
+  console.log('blob render')
+  const [points] = useState<Point[]>(createPoints())
 
   const { bg, paused = false } = props
-  const [path, setPath] = useState<string>('')
+
+  const pathRef = useRef<SVGPathElement>(null)
+  const animation = useRef<number>(0)
 
   useEffect(() => {
-    let cancel = false
-
     function animate() {
-      if (cancel) {
-        return
-      }
-
       if (!paused) {
-        setPath(spline(points, 1, true))
+        pathRef.current?.setAttribute('d', spline(points, 1, true))
 
         for (let i = 0; i < points.length; i++) {
           const point = points[i]
@@ -64,15 +57,13 @@ const AnimatingBlob = (props: AnimatingBlobProps) => {
         }
       }
 
-      requestAnimationFrame(animate)
+      animation.current = requestAnimationFrame(animate)
     }
 
     animate()
 
-    return () => {
-      cancel = true
-    }
-  }, [points, paused])
+    return () => cancelAnimationFrame(animation.current)
+  }, [paused])
 
   return (
     <div>
@@ -83,11 +74,13 @@ const AnimatingBlob = (props: AnimatingBlobProps) => {
           height: '100%',
         }}
       >
-        <path d={path} fill={bg}></path>
+        <path ref={pathRef} fill={bg} />
       </svg>
     </div>
   )
-}
+})
+
+AnimatingBlob.displayName = 'AnimatingBlob'
 
 function createPoints() {
   const points = []

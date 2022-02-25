@@ -12,7 +12,7 @@ import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import { useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import firebaseApp from '../../services/firebase/app'
-import { PasswordField } from '../../components/password-field'
+import { PasswordField } from '../../components/PasswordField'
 
 export const LoginForm = (props: HTMLChakraProps<'form'>) => {
   const router = useRouter()

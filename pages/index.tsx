@@ -1,8 +1,8 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import BreakTimer from '@/features/timer/break-timer'
-import FocusingTimer from '@/features/timer/focusing-timer'
-import InitialStateTimer from '@/features/timer/initial-state-timer'
+import BreakTimer from '@/features/timer/BreakTimer'
+import FocusingTimer from '@/features/timer/FocusingTimer'
+import InitialStateTimer from '@/features/timer/InitialStateTimer'
 import { Box, Flex, Stack, Text } from '@chakra-ui/react'
 import useTimer from '@/hooks/useTimer'
 import {

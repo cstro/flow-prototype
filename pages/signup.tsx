@@ -9,10 +9,10 @@ import {
 } from '@chakra-ui/react'
 import { FaFacebook, FaGithub, FaGoogle } from 'react-icons/fa'
 import { NextPage } from 'next'
-import { Card } from '../components/card'
-import { DividerWithText } from '../components/divider-with-text'
-import { Link } from '../components/link'
-import SignUpForm from '../features/auth/sign-up-form'
+import Card from '@/components/Card'
+import { DividerWithText } from '@/components/DividerWithText'
+import { Link } from '@/components/Link'
+import SignUpForm from '@/features/auth/SignUpForm'
 
 const SignUp: NextPage = () => (
   <Box

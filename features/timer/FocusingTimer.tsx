@@ -7,9 +7,9 @@ import {
   Icon,
   Tooltip,
 } from '@chakra-ui/react'
-import AnimatingBlob from '@/components/animating-blob'
+import AnimatingBlob from '@/components/AnimatingBlob'
 import useSettingsStore from '@/store/useSettingsStore'
-import BeginBreakButton from './begin-break-button'
+import BeginBreakButton from './BeginBreakButton'
 import { humanizeTimeLeft } from '@/utils/time'
 import useTimer from '@/hooks/useTimer'
 import { IoPlaySkipForwardOutline, IoStopOutline } from 'react-icons/io5'
@@ -35,20 +35,24 @@ const FocusingTimer = () => {
       {!done && (
         <>
           <Box
+            style={{
+              transform: `scale(${size})`,
+            }}
             w={`150vmax`}
             h={`150vmax`}
             transition="transform 500ms linear"
-            transform={`scale(${size})`}
             pos="fixed"
             willChange="transform"
           >
             <AnimatingBlob bg="#126BFB" paused={isPaused} />
           </Box>
           <Box
+            style={{
+              transform: `scale(${size + 0.015})`,
+            }}
             w={`150vmax`}
             h={`150vmax`}
             transition="transform 500ms linear"
-            transform={`scale(${size + 0.015})`}
             willChange="transform"
             pos="fixed"
             opacity="0.1"

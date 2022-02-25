@@ -1,4 +1,4 @@
-import TimerContext from '@/features/timer/timer-context'
+import TimerContext from '@/features/timer/TimerContext'
 import React from 'react'
 
 const useTimer = () => {

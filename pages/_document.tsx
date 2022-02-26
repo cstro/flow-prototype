@@ -17,7 +17,7 @@ class MyDocument extends Document {
             href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500&display=swap"
             rel="stylesheet"
           />
-
+          {/* 
           <meta name="application-name" content="PWA App" />
           <meta name="apple-mobile-web-app-capable" content="yes" />
           <meta
@@ -25,7 +25,7 @@ class MyDocument extends Document {
             content="default"
           />
           <meta name="apple-mobile-web-app-title" content="PWA App" />
-          <meta name="description" content="Best PWA App in the world" />
+          <meta name="description" content="Best PWA App in the world" /> */}
           <meta name="format-detection" content="telephone=no" />
           <meta name="mobile-web-app-capable" content="yes" />
           <meta
@@ -36,7 +36,7 @@ class MyDocument extends Document {
           <meta name="msapplication-tap-highlight" content="no" />
           <meta name="theme-color" content="#000000" />
 
-          <link rel="apple-touch-icon" href="/icons/touch-icon-iphone.png" />
+          {/* <link rel="apple-touch-icon" href="/icons/touch-icon-iphone.png" />
           <link
             rel="apple-touch-icon"
             sizes="152x152"
@@ -70,14 +70,10 @@ class MyDocument extends Document {
             rel="mask-icon"
             href="/icons/safari-pinned-tab.svg"
             color="#5bbad5"
-          />
+          /> */}
           <link rel="shortcut icon" href="/favicon.ico" />
-          <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
-          />
 
-          <meta name="twitter:card" content="summary" />
+          {/* <meta name="twitter:card" content="summary" />
           <meta name="twitter:url" content="https://yourdomain.com" />
           <meta name="twitter:title" content="PWA App" />
           <meta
@@ -97,7 +93,7 @@ class MyDocument extends Document {
           <meta
             property="og:image"
             content="https://yourdomain.com/icons/apple-touch-icon.png"
-          />
+          /> */}
 
           <link
             rel="apple-touch-startup-image"

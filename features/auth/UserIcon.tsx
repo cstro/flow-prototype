@@ -1,7 +1,7 @@
 import { Avatar } from '@chakra-ui/react'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { Link } from '../../components/Link'
-import firebaseAuth from '../../services/firebase/auth'
+import { Link } from '@/components/Link'
+import firebaseAuth from '@/services/firebase/auth'
 
 const UserIcon = () => {
   const [user] = useAuthState(firebaseAuth)

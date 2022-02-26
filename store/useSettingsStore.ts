@@ -4,6 +4,8 @@ import { devtools, persist, StoreApiWithPersist } from 'zustand/middleware'
 type SettingsStore = {
   focusDuration: number
   breakDuration: number
+  debugOverlay: boolean
+  toggleDebugOverlay: () => void
 }
 
 const useSettingsStore = create<
@@ -13,14 +15,17 @@ const useSettingsStore = create<
   StoreApiWithPersist<SettingsStore>
 >(
   persist(
-    devtools(() => ({
+    devtools((set, get) => ({
       focusDuration: 25 * 60,
       breakDuration: 5 * 60,
+      debugOverlay: false,
+      toggleDebugOverlay: () => {
+        set({ debugOverlay: !get().debugOverlay })
+      },
     })),
     {
-      name: 'app-storage',
+      name: 'settings',
       version: 1,
-      partialize: () => ({}),
     }
   )
 )

@@ -1,16 +1,6 @@
-import {
-  Box,
-  Button,
-  Heading,
-  SimpleGrid,
-  Text,
-  useColorModeValue,
-  VisuallyHidden,
-} from '@chakra-ui/react'
-import { FaFacebook, FaGithub, FaGoogle } from 'react-icons/fa'
+import { Box, Heading, Text, useColorModeValue } from '@chakra-ui/react'
 import { NextPage } from 'next'
 import Card from '@/components/Card'
-import DividerWithText from '@/components/DividerWithText'
 import Link from '@/components/Link'
 import LoginForm from '@/features/auth/LoginForm'
 
@@ -31,21 +21,6 @@ const SignUp: NextPage = () => (
       </Text>
       <Card>
         <LoginForm />
-        <DividerWithText mt="6">or continue with</DividerWithText>
-        <SimpleGrid mt="6" columns={3} spacing="3">
-          <Button color="currentColor" variant="outline">
-            <VisuallyHidden>Login with Facebook</VisuallyHidden>
-            <FaFacebook />
-          </Button>
-          <Button color="currentColor" variant="outline">
-            <VisuallyHidden>Login with Google</VisuallyHidden>
-            <FaGoogle />
-          </Button>
-          <Button color="currentColor" variant="outline">
-            <VisuallyHidden>Login with Github</VisuallyHidden>
-            <FaGithub />
-          </Button>
-        </SimpleGrid>
       </Card>
     </Box>
   </Box>

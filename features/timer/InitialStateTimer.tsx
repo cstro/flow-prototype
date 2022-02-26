@@ -1,5 +1,5 @@
 import { Box, Stack, Text } from '@chakra-ui/react'
-import { TimeIcon } from '@chakra-ui/icons'
+import { SettingsIcon, TimeIcon } from '@chakra-ui/icons'
 import Link from '@/components/Link'
 import UserIcon from '@/features/auth/UserIcon'
 import BeginFocusButton from './BeginFocusButton'
@@ -46,6 +46,11 @@ const InitialStateTimer = () => {
       <Box pos="fixed" top="5" right="5">
         <Link href="/sessions" title="Session History">
           <TimeIcon />
+        </Link>
+      </Box>
+      <Box pos="fixed" top="12" right="5">
+        <Link href="/settings" title="Settings">
+          <SettingsIcon />
         </Link>
       </Box>
     </>

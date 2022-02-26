@@ -10,7 +10,6 @@ import {
 import { useRouter } from 'next/router'
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import { useState } from 'react'
-import { useAuthState } from 'react-firebase-hooks/auth'
 import firebaseApp from '@/services/firebase/app'
 import PasswordField from '@/components/PasswordField'
 
@@ -20,8 +19,6 @@ const LoginForm = (props: HTMLChakraProps<'form'>) => {
   const auth = getAuth(firebaseApp)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-
-  const [loading] = useAuthState(auth)
 
   return (
     <chakra.form
@@ -48,13 +45,7 @@ const LoginForm = (props: HTMLChakraProps<'form'>) => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button
-          isLoading={Boolean(loading)}
-          type="submit"
-          colorScheme="blue"
-          size="lg"
-          fontSize="md"
-        >
+        <Button type="submit" colorScheme="blue" size="lg" fontSize="md">
           Sign in
         </Button>
       </Stack>

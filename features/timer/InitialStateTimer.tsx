@@ -1,7 +1,7 @@
 import { Box, Stack, Text } from '@chakra-ui/react'
 import { TimeIcon } from '@chakra-ui/icons'
-import { Link } from '../../components/Link'
-import UserIcon from '../auth/UserIcon'
+import Link from '@/components/Link'
+import UserIcon from '@/features/auth/UserIcon'
 import BeginFocusButton from './BeginFocusButton'
 
 const InitialStateTimer = () => {

@@ -11,10 +11,10 @@ import { useRouter } from 'next/router'
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import { useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import firebaseApp from '../../services/firebase/app'
-import { PasswordField } from '../../components/PasswordField'
+import firebaseApp from '@/services/firebase/app'
+import PasswordField from '@/components/PasswordField'
 
-export const LoginForm = (props: HTMLChakraProps<'form'>) => {
+const LoginForm = (props: HTMLChakraProps<'form'>) => {
   const router = useRouter()
 
   const auth = getAuth(firebaseApp)
@@ -61,3 +61,5 @@ export const LoginForm = (props: HTMLChakraProps<'form'>) => {
     </chakra.form>
   )
 }
+
+export default LoginForm

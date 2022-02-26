@@ -7,7 +7,7 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react'
 
-export const DividerWithText = (props: FlexProps) => {
+const DividerWithText = (props: FlexProps) => {
   const { children, ...flexProps } = props
   return (
     <Flex align="center" color="gray.300" {...flexProps}>
@@ -28,3 +28,5 @@ export const DividerWithText = (props: FlexProps) => {
     </Flex>
   )
 }
+
+export default DividerWithText

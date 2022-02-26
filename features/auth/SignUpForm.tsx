@@ -15,8 +15,8 @@ import { getAuth } from 'firebase/auth'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth'
-import firebaseApp from '../../services/firebase/app'
-import { PasswordField } from '../../components/PasswordField'
+import firebaseApp from '@/services/firebase/app'
+import PasswordField from '@/components/PasswordField'
 
 const SignUpForm = (props: HTMLChakraProps<'form'>) => {
   const router = useRouter()

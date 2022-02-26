@@ -10,8 +10,8 @@ import {
 import { FaFacebook, FaGithub, FaGoogle } from 'react-icons/fa'
 import { NextPage } from 'next'
 import Card from '@/components/Card'
-import { DividerWithText } from '@/components/DividerWithText'
-import { Link } from '@/components/Link'
+import DividerWithText from '@/components/DividerWithText'
+import Link from '@/components/Link'
 import SignUpForm from '@/features/auth/SignUpForm'
 
 const SignUp: NextPage = () => (

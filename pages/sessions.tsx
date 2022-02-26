@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react'
 import { format, getUnixTime, isSameDay } from 'date-fns'
 import type { NextPage } from 'next'
-import { Link } from '@/components/Link'
+import Link from '@/components/Link'
 import useAllSessions from '@/hooks/useAllSessions'
 import { Session } from '@/types/session'
 

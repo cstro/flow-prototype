@@ -15,7 +15,7 @@ import {
 import * as React from 'react'
 import { HiEye, HiEyeOff } from 'react-icons/hi'
 
-export const PasswordField = React.forwardRef<HTMLInputElement, InputProps>(
+const PasswordField = React.forwardRef<HTMLInputElement, InputProps>(
   (props, ref) => {
     const { isOpen, onToggle } = useDisclosure()
     const inputRef = React.useRef<HTMLInputElement>(null)
@@ -72,3 +72,5 @@ export const PasswordField = React.forwardRef<HTMLInputElement, InputProps>(
 )
 
 PasswordField.displayName = 'PasswordField'
+
+export default PasswordField

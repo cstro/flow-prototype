@@ -43,12 +43,12 @@ const InitialStateTimer = () => {
         </Stack>
       </Stack>
       <UserIcon />
-      <Box pos="fixed" top="5" right="5">
+      <Box pos="fixed" top="5" right="5" fontSize="2xl">
         <Link href="/sessions" title="Session History">
           <TimeIcon />
         </Link>
       </Box>
-      <Box pos="fixed" top="12" right="5">
+      <Box pos="fixed" top="5" right="16" fontSize="2xl">
         <Link href="/settings" title="Settings">
           <SettingsIcon />
         </Link>
